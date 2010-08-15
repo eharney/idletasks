@@ -44,7 +44,7 @@ def idlechange_handler(sender=None):
 dbus_loop = DBusGMainLoop(set_as_default=True)
 bus = dbus.SessionBus(mainloop=dbus_loop)
 
-bus.add_signal_receiver(idlechange_handler, "SessionIdleChanged", "org.gnome.ScreenSaver")
+bus.add_signal_receiver(idlechange_handler, "ActiveChanged", "org.gnome.ScreenSaver")
 
 mainloop = MainLoop()
 mainloop.run()
