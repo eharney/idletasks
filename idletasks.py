@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# This script is more of an experiment than anything, but it does function.
+
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gobject import MainLoop
@@ -17,10 +19,16 @@ def idle_pidgin():
 	pass
 
 def cpu_slowdown():
+	# Lock CPUs to lowest possible speed
 	popen('sudo sh -c "echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"')
+	popen('sudo sh -c "echo powersave > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"')
 
 def cpu_speedup():
-	popen('sudo sh -c "echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"')
+	# Set CPUs for ondemand scheduler
+	popen('sudo sh -c "echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"')
+	popen('sudo sh -c "echo 20 > /sys/devices/system/cpu/cpu0/cpufreq/ondemand/up_threshold"')
+	popen('sudo sh -c "echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"')
+	popen('sudo sh -c "echo 20 > /sys/devices/system/cpu/cpu1/cpufreq/ondemand/up_threshold"')
 
 def start_tasks():
 #	start_boinc()
