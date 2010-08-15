@@ -1,0 +1,4 @@
+This is a collection of various bits of code.
+
+idletasks.py:
+	This was written mostly just as a learning experiment, but is useful.  It uses dbus events from gnome-screensaver to do things when you aren't actively using your computer.
