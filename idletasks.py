@@ -2,43 +2,37 @@
 
 # This script is more of an experiment than anything, but it does function.
 
+# To use this:
+# 1. Put scripts to run when the system becomes idle in ~/.idletasks/idle.d
+#    Put scripts to run when the system becomes unidle in ~/.idletasks/unidle.d
+# 2. Configure your desktop environment to run this script when you log in.
+
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gobject import MainLoop
+import os
 from os import popen
+import glob
 
-def start_boinc():
-#	popen("nice -n 19 /home/emh/BOINC/boinc -daemon -redirectio -dir /home/emh/BOINC/")
-    pass
-def stop_boinc():
-#	popen("killall -SIGHUP boinc")
-    pass
+def idle_d_tasks():
+	idle_path = os.path.expanduser('~/.idletasks/idle.d/')
+	for task in glob.glob(idle_path + '*'):
+		print "run",
+		print task
+		popen(task)
 
-def idle_pidgin():
-	# purple-remote mojo
-	pass
-
-def cpu_slowdown():
-	# Lock CPUs to lowest possible speed
-	popen('sudo sh -c "echo powersave > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"')
-	popen('sudo sh -c "echo powersave > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"')
-
-def cpu_speedup():
-	# Set CPUs for ondemand scheduler
-	popen('sudo sh -c "echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"')
-	popen('sudo sh -c "echo 20 > /sys/devices/system/cpu/cpu0/cpufreq/ondemand/up_threshold"')
-	popen('sudo sh -c "echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"')
-	popen('sudo sh -c "echo 20 > /sys/devices/system/cpu/cpu1/cpufreq/ondemand/up_threshold"')
+def unidle_d_tasks():
+	unidle_path = os.path.expanduser('~/.idletasks/unidle.d/')
+	for task in glob.glob(unidle_path + '*'):
+		print "run",
+		print task
+		popen(task)
 
 def start_tasks():
-#	start_boinc()
-	idle_pidgin()
-	cpu_slowdown()
+	idle_d_tasks()
 
 def stop_tasks():
-#	stop_boinc()
-	cpu_speedup()
-
+	unidle_d_tasks()
 
 def idlechange_handler(sender=None):
 	if sender:
